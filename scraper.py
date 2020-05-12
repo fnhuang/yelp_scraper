@@ -70,7 +70,7 @@ class ListCrawler():
             if price_span == None:
                 price.append("NA")
             else:
-                price.append(span.text)
+                price.append(price_span.text)
 
             tag_lnks = price_tag_div.find_all("a")
             tag = ""
@@ -114,7 +114,7 @@ class ListCrawler():
 
 
 
-start_url = "https://www.yelp.com.sg/search?cflt=restaurants&find_loc=Singapore&start=60"
+start_url = "https://www.yelp.com.sg/search?cflt=restaurants&find_loc=Singapore&start=150"
 sleep_time = 5
 list_crawler = ListCrawler(start_url, sleep_time)
 list_crawler.run("resto_list.csv")
