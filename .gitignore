@@ -1,3 +1,4 @@
-resto_list.csv
+*.csv
 .idea
-temp.html
+*.html
+reviews
