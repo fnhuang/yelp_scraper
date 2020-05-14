@@ -108,32 +108,12 @@ class ReviewCrawler(Crawler):
 
                 next_url = next_url[0:next_url.rindex("=") + 1] + str((i + 1) * item_per_page)
 
-class ListCrawler():
-    def __init__(self, start_url, sleep_time):
-        self.start_url = start_url
-        self.sleep_time = sleep_time
-        self.yelp_start_index = int(start_url[start_url.rindex("=")+1:])
+class ListCrawler(Crawler):
+    def __init__(self, home_url, sleep_time, start_index):
+        super().__init__(home_url, sleep_time, start_index)
 
         #info crawled
         self.header = ["yelp start index","place name","link","stars","reviews","price","tags"]
-
-    def _get_total_page(self):
-        response = requests.get(self.start_url).text
-        '''with open("temp.html",'r',encoding="utf8") as reader:
-            response = reader.read()'''
-
-        soup = BeautifulSoup(response, 'html.parser')
-        navigation_div = soup.find("div", {"role": "navigation"})
-        pagi_div = navigation_div.findChild("div", {"class":re.compile(".*padding-b2.*")})
-        total_page = int(pagi_div.text[pagi_div.text.index("of") + 3:])
-
-        return total_page
-
-    def _get_write_type(self, save_to_file):
-        if os.path.isfile(save_to_file):
-            return "a"
-        else:
-            return "w"
 
     def _extract_data(self, response):
         place_names = []
@@ -274,12 +254,12 @@ list_crawler = ListCrawler(start_url, sleep_time)
 list_crawler.run("resto_list.csv")'''
 
 # If you want to scrape geographic coordinates, run the following lines
-'''name_link_pairs = get_names_and_links_to_crawl("bottom782.csv")
-gfinder = GeocoordinatesFinder(name_link_pairs[81:],15)
-gfinder.run("geocoordinates.csv")'''
+name_link_pairs = get_names_and_links_to_crawl("bottom782.csv")
+gfinder = GeocoordinatesFinder(name_link_pairs[702:],15)
+gfinder.run("geocoordinates.csv")
 
 # If you want to scrape reviews given a list of places, run the following lines
-sleep_time = 10
+'''sleep_time = 10
 name_link_pairs = get_names_and_links_to_crawl("top97.csv")
 count = 0
 for name,link,start_index in name_link_pairs:
@@ -287,4 +267,4 @@ for name,link,start_index in name_link_pairs:
     print("Processing place no.", count, "Name:", name)
     review_crawler = ReviewCrawler(link, sleep_time, int(start_index))
     file_name = f"{link[link.rindex('/')+1:]}.csv"
-    review_crawler.run(f"reviews/{file_name}")
+    review_crawler.run(f"reviews/{file_name}")'''
